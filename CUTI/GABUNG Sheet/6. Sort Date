@@ -1,0 +1,9 @@
+Sub sort_date()
+    Dim tblETA As ListObject
+
+    Set tblETA = Range("ETA").ListObject
+
+    tblETA.Sort.SortFields.Add Key:=tblETA.ListColumns("TGL TEXT").Range, _
+                            Order:=xlAscending, DataOption:=xlSortNormal
+    tblETA.Sort.Apply
+End Sub

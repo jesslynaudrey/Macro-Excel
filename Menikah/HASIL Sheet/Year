@@ -1,0 +1,11 @@
+Sub tahun()
+'
+' tahun Macro
+'
+
+    Range("I4").Select
+    ActiveCell.FormulaR1C1 = "=YEAR(RC[-5])"
+    Range("I4").Select
+    Selection.AutoFill Destination:=Range("I4:I912")
+    Range("I4:I912").Select
+End Sub

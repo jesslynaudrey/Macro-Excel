@@ -1,0 +1,11 @@
+Sub concatenate()
+'
+' concatenate Macro
+'
+
+    Range("I5").Select
+    ActiveCell.FormulaR1C1 = "=CONCATENATE(RC[-2],""_"",RC[-6])"
+    Range("I5").Select
+    Selection.AutoFill Destination:=Range("I5:I5000")
+    Range("I5:I5000").Select
+End Sub

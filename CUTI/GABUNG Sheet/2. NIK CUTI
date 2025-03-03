@@ -1,0 +1,17 @@
+Sub NIK_CUTI()
+    Dim curr As Worksheet
+    Dim sheetTarget As Worksheet
+    Dim lastRow As Integer
+    Dim currLastRow As Integer
+
+    Set curr = ActiveSheet
+    Set sheetTarget = ThisWorkbook.Sheets("CUTI")
+
+    lastRow = sheetTarget.Range("A2").End(xlDown).Row
+    sheetTarget.Range("A2:A" & lastRow).Copy
+
+    currLastRow = curr.Range("A2").End(xlDown).Row
+    curr.Range("A" & currLastRow + 1).PasteSpecial Paste:=xlPasteValues
+
+    Range("A2").Activate
+End Sub

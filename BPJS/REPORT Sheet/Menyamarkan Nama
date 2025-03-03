@@ -1,0 +1,45 @@
+Sub menyamarkan()
+    Dim flag As Integer
+    Dim countWord As Integer
+    Dim count As Integer
+    Dim i As Integer
+    Dim j As Integer
+    Dim name As String
+    Dim nameResult As String
+    Dim lastRow As Long
+    Dim currentRow As Long
+
+    lastRow = Cells(Rows.count, "C").End(xlUp).Row
+    currentRow = ActiveCell.Row
+
+    Do While currentRow <= lastRow And currentRow <= 5000
+        name = Cells(currentRow, "C").Value
+        count = Len(name) - Len(Replace(name, " ", ""))
+
+        If count > 0 Then
+            flag = Application.WorksheetFunction.Find(" ", name)
+            nameResult = Left(name, flag - 1)
+
+            For i = 1 To count
+                name = Mid(name, flag + 1, Len(name))
+                If InStr(name, " ") > 0 Then
+                    flag = Application.WorksheetFunction.Find(" ", name)
+                    countWord = Len(Left(name, flag - 1))
+                Else
+                    countWord = Len(name)
+                End If
+
+                nameResult = nameResult & " "
+                For j = 1 To countWord
+                    nameResult = nameResult & "X"
+                Next j
+            Next i
+        Else
+            nameResult = name
+        End If
+
+        Cells(currentRow, "K").Value = nameResult
+        currentRow = currentRow + 1
+    Loop
+
+End Sub

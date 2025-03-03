@@ -1,0 +1,6 @@
+Sub unfilter()
+    Dim tblDB As ListObject
+    Set tblDB = Range("DB").ListObject
+
+    tblDB.AutoFilter.ShowAllData
+End Sub

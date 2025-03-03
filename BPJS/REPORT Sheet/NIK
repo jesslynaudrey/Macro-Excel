@@ -1,0 +1,14 @@
+Sub NIK()
+
+    Range("G5").Select
+    ActiveCell.FormulaR1C1 = "=VLOOKUP(RC[-6],BPJS!R[3]C[-5]:R[3338]C[1],7,0)"
+    Range("G5").Select
+    Selection.AutoFill Destination:=Range("G5:G5000")
+    Range("G5:G5000").Select
+    Range("H5").Select
+    ActiveCell.FormulaR1C1 = "=VLOOKUP(RC[-7],BPJS!R[3]C[-6]:R[3338]C[-3],4,0)"
+    Range("H5").Select
+    Selection.AutoFill Destination:=Range("H5:H4960")
+    Range("H5:H4960").Select
+
+End Sub

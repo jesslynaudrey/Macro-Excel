@@ -1,0 +1,34 @@
+Sub select_BPJS()
+    Dim curr As Workbook
+    Dim sour As Workbook
+    Dim fileName As String
+    Dim sheetName As String
+    Dim sheetCopy As Worksheet
+    Dim sheetTarget As Worksheet
+
+    Set curr = ThisWorkbook
+    Set sheetTarget = curr.Sheets("BPJS")
+
+    fileName = Application.GetOpenFilename(FileFilter:="Excel Files (*.xls;*.xlsm;*xlsx), *.xls;*.xlsm;*xlsx")
+
+    If fileName = "" Then Exit Sub
+
+    Set sour = Workbooks.Open(fileName)
+
+    sheetName = InputBox("Masukkan nama sheet yang ingin dicopy", "Masukkan nama sheet")
+
+    On Error Resume Next
+    Set sheetCopy = sour.Sheets(sheetName)
+    On Error GoTo 0
+
+    If sheetCopy Is Nothing Then
+        MsgBox "Sheet tidak ditemukan", vbCritical
+    Else
+        sheetTarget.Cells.ClearContents
+        sheetTarget.Range("A1").Resize(sheetCopy.UsedRange.Rows.count, sheetCopy.UsedRange.Columns.count).NumberFormat = "@"
+        sheetTarget.Range("A1").Resize(sheetCopy.UsedRange.Rows.count, sheetCopy.UsedRange.Columns.count).Value = sheetCopy.UsedRange.Value
+        MsgBox "Sheet berhasil dicopy", vbInformation
+    End If
+
+    sour.Close SaveChanges:=False
+End Sub

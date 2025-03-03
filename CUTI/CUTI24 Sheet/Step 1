@@ -1,0 +1,77 @@
+Sub coba()
+    Dim tblETA As ListObject
+    Dim tblDB As ListObject
+    Dim arrETA As Variant
+    Dim arrDB As Variant
+    Dim i As Long, j As Long
+    Dim empID As String, etaDate As Date, monthName As String
+    Dim dictETA As Object, dictKey As String, dictNIK As Object
+    Dim monthColumn As Long
+    Dim count As Integer
+    Dim lastRow As Long
+
+    ' Set the references to the tables
+    Set tblETA = Range("ETA").ListObject
+    Set tblDB = Range("DB").ListObject
+
+    ' Load data from the tables into arrays
+    arrETA = tblETA.DataBodyRange.Value2
+    arrDB = tblDB.DataBodyRange.Value2
+
+    ' Create a dictionary to store ETA data by Employee ID and Month
+    Set dictETA = CreateObject("Scripting.Dictionary")
+    Set dictNIK = CreateObject("Scripting.Dictionary")
+
+    lastRow = Range("B6").End(xlDown).Row
+    ActiveSheet.Range("H6:T" & lastRow).ClearContents
+
+    ' Load ETA data into the dictionary with Employee ID and Month as keys
+    For i = 1 To UBound(arrETA)
+        ' empID = arrETA(i, 1) ' Assuming Employee ID is in the first column of ETA
+        ' etaDate = arrETA(i, 2) ' Assuming Date is in the second column of ETA
+
+        ' Extract the month from the date in ETA table
+        ' monthName = Format(etaDate, "mmmm") ' Gets the full month name
+
+        ' Create a composite key for the dictionary: "Employee ID" & "Month"
+        dictKey = arrETA(i, 6)
+
+        If dictNIK(arrETA(i, 1)) = "" Then
+            dictNIK(arrETA(i, 1)) = 1
+        Else
+            dictNIK(arrETA(i, 1)) = dictNIK(arrETA(i, 1)) + 1
+        End If
+
+        ' Store the value to be copied from ETA into the dictionary
+        ' If dictNIK(arrETA(i, 1)) < 12 Then
+            If dictETA(dictKey) = "" Then
+                dictETA(dictKey) = arrETA(i, 5)
+            Else
+                dictETA(dictKey) = dictETA(dictKey) & ", " & arrETA(i, 5)
+            End If ' Assuming the value to copy is in the third column of ETA
+        ' End If
+
+    Next i
+
+    ' Now update the DB table with the corresponding values from the ETA table
+    For j = 1 To UBound(arrDB)
+        empID = arrDB(j, 1) ' Employee ID in DB
+        arrDB(j, 19) = arrDB(j, 6) - dictNIK(empID)
+
+        ' Loop through the months in the DB table (columns 2 to the last column)
+        For monthColumn = 7 To UBound(arrDB, 2) - 1
+            monthName = tblDB.HeaderRowRange.Cells(1, monthColumn).Value ' Get the month name from the header
+
+            ' Check if there is a match for the Employee ID and Month in the dictionary
+            dictKey = empID & "-" & monthName
+
+            If dictETA.exists(dictKey) Then
+                ' If a match is found, populate the DB table with the corresponding value
+                arrDB(j, monthColumn) = dictETA(dictKey) ' Populate the cell for that Employee ID and Month
+            End If
+        Next monthColumn
+    Next j
+
+    ' Write back the updated data to the DB table
+    tblDB.DataBodyRange.Value2 = arrDB
+End Sub

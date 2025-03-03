@@ -1,0 +1,13 @@
+Sub CEK_DATA()
+'
+' CEK_DATA Macro
+'
+
+    Range("J5").Select
+    ActiveCell.FormulaR1C1 = _
+        "=IF(RC[-5]=""PESERTA"",RC[-1],VLOOKUP(RC[-1],HRIS!R[1]C[-2]:R[14805]C[-2],1,0))"
+    Range("J5").Select
+    Selection.AutoFill Destination:=Range("J5:J5000")
+    Range("J5:J5000").Select
+
+End Sub

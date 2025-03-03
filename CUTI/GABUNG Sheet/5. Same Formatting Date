@@ -1,0 +1,17 @@
+Sub same_formatting_date()
+    Range("C2").Activate
+    ActiveCell.FormulaR1C1 = "=TEXT(RC[-1],""dd mmm yyyy"")"
+    Range("C3").Activate
+
+    Range("D2").Activate
+    ActiveCell.FormulaR1C1 = "=TEXT(RC[-1],""mmm"")"
+    Range("D3").Activate
+
+    Range("E2").Activate
+    ActiveCell.FormulaR1C1 = "=TEXT(RC[-2],""d"")"
+    Range("E3").Activate
+
+    Range("F2").Activate
+    ActiveCell.FormulaR1C1 = "=RC[-5]&""-""&RC[-2]"
+    Range("F3").Activate
+End Sub

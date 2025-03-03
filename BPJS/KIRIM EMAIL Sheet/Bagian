@@ -1,0 +1,24 @@
+Sub bagian2()
+'
+' bagian Macro
+'
+
+    Range("H4").Select
+    ' A4: D3381
+    ActiveCell.FormulaR1C1 = _
+        "=VLOOKUP(RC[-5],NEW_INDUK2!R[-1]C[-7]:R[3377]C[-4],4,0)"
+    Range("H4").Select
+    Selection.AutoFill Destination:=Range("H4:H500")
+    Range("H4:H500").Select
+    ActiveWorkbook.Worksheets("KIRIM EMAIL").AutoFilter.Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("KIRIM EMAIL").AutoFilter.Sort.SortFields.Add2 Key:=Range _
+        ("H3:H500"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    With ActiveWorkbook.Worksheets("KIRIM EMAIL").AutoFilter.Sort
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+End Sub

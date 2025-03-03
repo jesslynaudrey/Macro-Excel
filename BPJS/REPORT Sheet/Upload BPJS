@@ -1,0 +1,28 @@
+Sub select_entitas()
+    Dim sourceWorkbook As Workbook
+    Dim currentWorkbook As Workbook
+    Dim sourceName As String
+    Dim sheetTarget As Worksheet
+
+    Set currentWorkbook = ThisWorkbook
+    Set sheetTarget = currentWorkbook.Sheets("REPORT")
+
+    sourceName = Application.GetOpenFilename(FileFilter:="Excel Files (*.xls;*xlsx;*xlsm), *.xls;*xlsx;*xlsm")
+
+    If sourceName = "" Then
+        Exit Sub
+    End If
+
+    Set sourceWorkbook = Workbooks.Open(sourceName)
+
+    sheetTarget.Rows("5:" & sheetTarget.Rows.count).ClearContents
+    sourceWorkbook.Sheets(1).Range("A8", _
+        sourceWorkbook.Sheets(1).Cells( _
+            sourceWorkbook.Sheets(1).Range("A8").End(xlDown).Row - 1, _
+            sourceWorkbook.Sheets(1).Range("A8").End(xlToRight).Column _
+        ) _
+    ).Copy Destination:=sheetTarget.Range("A5")
+    MsgBox "Sheet berhasil dicopy", vbInformation
+
+    sourceWorkbook.Close SaveChanges:=False
+End Sub

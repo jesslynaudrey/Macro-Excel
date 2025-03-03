@@ -1,0 +1,10 @@
+Sub cek_suami_istri()
+
+    Range("H2").Select
+    ActiveCell.FormulaR1C1 = _
+        "=IF(COUNTIFS(HRIS!R[2]C[-6]:R[14806]C[-6],Worksheet!RC[-7],HRIS!R[2]C[-4]:R[14806]C[-4],""Suami / Istri"")=1,""Sudah Terdaftar"",""Belum Terdaftar"")"
+    Range("H2").Select
+    Selection.AutoFill Destination:=Range("H2:H3813")
+    Range("H2:H3813").Select
+
+End Sub

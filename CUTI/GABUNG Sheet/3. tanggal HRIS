@@ -1,0 +1,13 @@
+Sub tanggal_HRIS()
+    Dim curr As Worksheet
+    Dim sheetTarget As Worksheet
+    Dim lastRow As Integer
+
+    Set curr = ActiveSheet
+    Set sheetTarget = ThisWorkbook.Sheets("HRIS")
+
+    lastRow = sheetTarget.Range("E3").End(xlDown).Row
+    sheetTarget.Range("E3:E" & lastRow).Copy
+
+    curr.Range("B2").PasteSpecial Paste:=xlPasteValues
+End Sub

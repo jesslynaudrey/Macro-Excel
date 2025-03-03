@@ -1,0 +1,26 @@
+Sub select_HRN()
+    Dim curr As Workbook
+    Dim sour As Workbook
+    Dim fileName As String
+    Dim sheetTarget As Worksheet
+
+    Set curr = ThisWorkbook
+    Set sheetTarget = curr.Sheets("NEW_INDUK")
+
+    fileName = Application.GetOpenFilename(FileFilter:="Excel Files (.xls;.xlsm;xlsx), *.xls;.xlsm;*xlsx")
+
+    If fileName = "" Then Exit Sub
+
+    Set sour = Workbooks.Open(fileName)
+
+    sheetTarget.Cells.ClearContents
+    sour.Sheets(1).Range("D5", _
+        sour.Sheets(1).Cells( _
+            sour.Sheets(1).Range("D5").End(xlDown).Row, _
+            14 _
+        ) _
+    ).copy Destination:=sheetTarget.Range("A3")
+    MsgBox "Sheet berhasil dicopy", vbInformation
+
+    sour.Close SaveChanges:=False
+End Sub

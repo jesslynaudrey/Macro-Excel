@@ -1,0 +1,13 @@
+Sub HRIS_concat()
+
+'
+' HRIS_concat Macro
+'
+
+    Range("H4").Select
+    ActiveCell.FormulaR1C1 = "=CONCATENATE(RC[-6],""_"",RC[-3])"
+    Range("H4").Select
+    Selection.AutoFill Destination:=Range("H4:H14808")
+    Range("H4:H14808").Select
+
+End Sub

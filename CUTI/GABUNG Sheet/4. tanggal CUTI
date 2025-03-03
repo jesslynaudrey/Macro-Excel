@@ -1,0 +1,17 @@
+Sub tanggal_CUTI()
+    Dim curr As Worksheet
+    Dim sheetTarget As Worksheet
+    Dim lastRow As Integer
+    Dim currLastRow As Integer
+
+    Set curr = ActiveSheet
+    Set sheetTarget = ThisWorkbook.Sheets("CUTI")
+
+    lastRow = sheetTarget.Range("D2").End(xlDown).Row
+    sheetTarget.Range("D2:D" & lastRow).Copy
+
+    currLastRow = curr.Range("B2").End(xlDown).Row
+    curr.Range("B" & currLastRow + 1).PasteSpecial Paste:=xlPasteValues
+
+    Range("B2").Activate
+End Sub

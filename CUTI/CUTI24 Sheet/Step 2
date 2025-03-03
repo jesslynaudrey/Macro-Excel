@@ -1,0 +1,112 @@
+Sub AddSimpleComment()
+    Dim cmt As Comment
+    Dim WS As Worksheet
+    Dim Rng As Range
+    Dim lastRow As Long
+
+    Dim tblNOTE As ListObject
+    Dim tblDB As ListObject
+    Dim arrNOTE As Variant
+    Dim arrDB As Variant
+    Dim i As Long, j As Long, k As Long
+    Dim empID As String, noteDate As Date, monthName As String
+    Dim dictNOTE As Object, dictKey As String
+    Dim monthColumn As Long
+    Dim count As Integer
+    Dim arr() As String
+
+    ' Set the references to the tables
+    Set tblNOTE = Range("NOTE").ListObject
+    Set tblDB = Range("DB").ListObject
+
+    ' Load data from the tables into arrays
+    arrNOTE = tblNOTE.DataBodyRange.Value2
+    arrDB = tblDB.DataBodyRange.Value2
+
+    ' Create a dictionary to store ETA data by Employee ID and Month
+    Set dictNOTE = CreateObject("Scripting.Dictionary")
+    Set dictDELETE = CreateObject("Scripting.Dictionary")
+    Set dictNEW = CreateObject("Scripting.Dictionary")
+
+    ' Load ETA data into the dictionary with Employee ID and Month as keys
+    For i = 1 To UBound(arrNOTE)
+        dictKey = arrNOTE(i, 16)
+
+        ' Store the value to be copied from ETA into the dictionary
+        If arrNOTE(i, 12) <> "" Then
+            If dictNOTE(dictKey) = "" Then
+                dictNOTE(dictKey) = arrNOTE(i, 12)
+                dictDELETE(dictKey) = arrNOTE(i, 15)
+            Else
+                dictNOTE(dictKey) = dictNOTE(dictKey) & vbCrLf & arrNOTE(i, 12)
+                dictDELETE(dictKey) = dictDELETE(dictKey) & ", " & arrNOTE(i, 15)
+            End If
+        Else
+            If dictNEW(dictKey) = "" Then
+                dictNEW(dictKey) = arrNOTE(i, 15)
+            Else
+                dictNEW(dictKey) = dictNEW(dictKey) & ", " & arrNOTE(i, 15)
+            End If
+        End If
+        ' End If
+
+    Next i
+    Set WS = ActiveSheet
+    lastRow = Range("B6").End(xlDown).Row
+    WS.Range("H6:S" & lastRow).ClearComments
+
+    ' Now update the DB table with the corresponding values from the ETA table
+    For j = 1 To UBound(arrDB)
+        empID = arrDB(j, 1) ' Employee ID in DB
+
+        ' Loop through the months in the DB table (columns 2 to the last column)
+        For monthColumn = 7 To UBound(arrDB, 2) - 3
+            monthName = tblDB.HeaderRowRange.Cells(1, monthColumn).Value ' Get the month name from the header
+
+            ' Check if there is a match for the Employee ID and Month in the dictionary
+            dictKey = empID & "-" & monthName
+
+            If dictNOTE.exists(dictKey) Then
+                Set Rng = WS.Cells(j + 5, monthColumn + 1)
+                Set cmt = Rng.AddComment(dictNOTE(dictKey))
+                cmt.Visible = False
+
+                arr = Split(dictDELETE(dictKey), ", ")
+
+                For k = 0 To UBound(arr, 1)
+                    If InStr(1, arrDB(j, monthColumn), ", " & arr(k), vbTextCompare) <> 0 Then
+                        arrDB(j, monthColumn) = Replace(arrDB(j, monthColumn), ", " & arr(k), "")
+                        arrDB(j, 19) = arrDB(j, 19) + 1
+                    ElseIf InStr(1, arrDB(j, monthColumn), arr(k) & ", ", vbTextCompare) <> 0 Then
+                        arrDB(j, monthColumn) = Replace(arrDB(j, monthColumn), arr(k) & ", ", "")
+                        arrDB(j, 19) = arrDB(j, 19) + 1
+                    ElseIf InStr(1, arrDB(j, monthColumn), arr(k), vbTextCompare) <> 0 Then
+                        arrDB(j, monthColumn) = Replace(arrDB(j, monthColumn), arr(k), "")
+                        arrDB(j, 19) = arrDB(j, 19) + 1
+                    End If
+                Next k
+
+            End If
+
+            If dictNEW.exists(dictKey) Then
+                If InStr(1, arrDB(j, monthColumn), dictNEW(dictKey), vbTextCompare) = 0 Then
+                    If arrDB(j, monthColumn) = "" Then
+                        arrDB(j, monthColumn) = dictNEW(dictKey)
+                    Else
+                        arrDB(j, monthColumn) = arrDB(j, monthColumn) & ", " & dictNEW(dictKey)
+                    End If
+                    arrDB(j, 19) = arrDB(j, 19) - 1
+                End If
+            End If
+        Next monthColumn
+    Next j
+
+    tblDB.DataBodyRange.Value2 = arrDB
+
+
+    Range("V6").Activate
+    ActiveCell.FormulaR1C1 = "=RC[-2]=RC[-1]"
+    Selection.AutoFill Destination:=Range("DB[CEK]")
+    Range("DB[CEK]").Select
+    Range("V7").Activate
+End Sub

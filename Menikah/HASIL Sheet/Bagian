@@ -1,0 +1,23 @@
+Sub bagian()
+'
+' bagian Macro
+'
+
+    Range("J4").Select
+    ActiveCell.FormulaR1C1 = _
+        "=VLOOKUP(RC[-9],NEW_INDUK!R[-1]C[-9]:R[3377]C[-6],4,0)"
+    Range("J4").Select
+    Selection.AutoFill Destination:=Range("J4:J912")
+    Range("J4:J912").Select
+    ActiveWorkbook.Worksheets("HASIL").AutoFilter.Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("HASIL").AutoFilter.Sort.SortFields.Add2 Key:=Range _
+        ("J3:J912"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    With ActiveWorkbook.Worksheets("HASIL").AutoFilter.Sort
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+End Sub

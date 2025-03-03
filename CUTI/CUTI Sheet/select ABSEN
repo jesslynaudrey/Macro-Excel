@@ -1,0 +1,21 @@
+Sub select_CUTI()
+    Dim curr As Workbook
+    Dim sour As Workbook
+    Dim fileName As String
+    Dim sheetTarget As Worksheet
+
+    Set curr = ThisWorkbook
+    Set sheetTarget = curr.Sheets("CUTI")
+
+    fileName = Application.GetOpenFilename(FileFilter:="Excel Files (*.xls;*.xlsm;*xlsx), *.xls;*.xlsm;*xlsx")
+
+    If fileName = "" Then Exit Sub
+
+    Set sour = Workbooks.Open(fileName)
+
+    sheetTarget.Cells.ClearContents
+    sour.Sheets(1).UsedRange.Copy Destination:=sheetTarget.Range("A1")
+    MsgBox "Sheet berhasil dicopy", vbInformation
+
+    sour.Close SaveChanges:=False
+End Sub

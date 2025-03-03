@@ -1,0 +1,13 @@
+Sub remove_duplicate()
+'
+' remove_duplicate Macro
+'
+
+    Range("A4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    ActiveSheet.Range("$A$3:$H$2572").RemoveDuplicates Columns:=Array(1, 2), _
+        Header:=xlYes
+End Sub

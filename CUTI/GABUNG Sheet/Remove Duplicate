@@ -1,0 +1,12 @@
+Sub remove_duplicate()
+    Dim curr As Worksheet
+    Dim lastRow As Long
+    Dim targetRange As Range
+
+    Set curr = ActiveSheet
+
+    lastRow = curr.Range("A2").End(xlDown).Row
+    Set targetRange = curr.Range("A2:F" & lastRow)
+
+    targetRange.RemoveDuplicates Columns:=Array(1, 3), Header:=xlNo
+End Sub

@@ -1,0 +1,11 @@
+Sub delete_NA()
+'
+' delete_NA Macro
+'
+
+    ActiveSheet.Range("$A$3:$J$912").AutoFilter Field:=10, Criteria1:="#N/A"
+    Range("J173").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.EntireRow.Delete
+    ActiveSheet.Range("$A$3:$J$172").AutoFilter Field:=10
+End Sub

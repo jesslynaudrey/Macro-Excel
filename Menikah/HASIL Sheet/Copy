@@ -1,0 +1,18 @@
+Sub copy()
+'
+' copy Macro
+'
+
+    Sheets("Worksheet").Select
+    ActiveSheet.Range("$A$1:$H$3813").AutoFilter Field:=8, Criteria1:= _
+        "Belum Terdaftar"
+    Range("A1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range("A1:H3813").Select
+    Selection.copy
+    Sheets("HASIL").Select
+    Range("A3").Select
+    ActiveSheet.Paste
+    Sheets("Worksheet").Range("$A$1:$H$3813").AutoFilter Field:=8
+End Sub

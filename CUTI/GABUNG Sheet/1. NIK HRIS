@@ -1,0 +1,16 @@
+Sub NIK_HRIS()
+    Dim curr As Worksheet
+    Dim sheetTarget As Worksheet
+    Dim lastRow As Long
+
+    Set curr = ActiveSheet
+    Set sheetTarget = ThisWorkbook.Sheets("HRIS")
+
+    lastRow = curr.Range("A2").End(xlDown).Row
+    curr.Range("A2:F" & lastRow).ClearContents
+
+    lastRow = sheetTarget.Range("A3").End(xlDown).Row
+    sheetTarget.Range("A3:A" & lastRow).Copy
+
+    curr.Range("A2").PasteSpecial Paste:=xlPasteValues
+End Sub

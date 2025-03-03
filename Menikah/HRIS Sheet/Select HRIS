@@ -1,0 +1,20 @@
+Sub select_HRIS()
+    Dim curr As Workbook
+    Dim sour As Workbook
+    Dim sourceName As String
+    Dim sheetTarget As Worksheet
+
+    Set curr = ThisWorkbook
+    Set sheetTarget = curr.Sheets("HRIS")
+
+    sourceName = Application.GetOpenFilename(FileFilter:="Excel Files (*.xls;*.xlsx;*.xlsm), *.xls;*.xlsx;*.xlsm")
+
+    Set sour = Workbooks.Open(sourceName)
+
+    sheetTarget.Cells.ClearContents
+    sour.Sheets(1).UsedRange.copy Destination:=sheetTarget.Range("A1")
+    MsgBox "Sheet berhasil dicopy", vbInformation
+
+    sour.Close SaveChanges:=False
+
+End Sub

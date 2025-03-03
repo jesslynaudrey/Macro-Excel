@@ -1,0 +1,10 @@
+Sub coba_remove()
+'
+' coba_remove Macro
+'
+
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Application.CutCopyMode = False
+    ActiveSheet.Range("$A$3:$K$10000").RemoveDuplicates Columns:=2
+End Sub

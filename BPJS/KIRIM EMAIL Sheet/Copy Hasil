@@ -1,0 +1,17 @@
+Sub Kirim()
+'
+' Kirim Macro
+'
+
+    Sheets("HASIL").Select
+    ActiveSheet.Range("$A$3:$K$4962").AutoFilter Field:=7, Criteria1:="<>#N/A"
+    ActiveSheet.Range("$A$3:$K$4962").AutoFilter Field:=10, Criteria1:="#N/A"
+    Range("E3").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Selection.Copy
+    Sheets("KIRIM EMAIL").Select
+    Range("A3").Select
+    ActiveSheet.Paste
+    Range("I2").Select
+End Sub
